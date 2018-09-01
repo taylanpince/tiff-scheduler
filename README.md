@@ -1,2 +1,3 @@
-# tiff-scheduler
-Schedule creator for Toronto International Film Festival
+# TIFF Scheduler
+
+Schedule creator for Toronto International Film Festival.

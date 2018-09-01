@@ -4,35 +4,26 @@ import requests
 import sys
 
 from datetime import datetime
-from urlparse import urlparse
+from urllib.parse import urlparse
 from dateutil import parser
 from pprint import pprint
 
 
 FILM_DETAIL_URL = "http://www.tiff.net/data/films/%(slug)s.json"
 
-FILM_URLS = (
-    "http://www.tiff.net/tiff/call-me-by-your-name/",
-    "http://www.tiff.net/tiff/a-ciambra/",
-    # "http://www.tiff.net/tiff/short-cuts-programme-02/",
-    "http://www.tiff.net/tiff/the-legend-of-the-ugly-king/",
-    "http://www.tiff.net/tiff/faces-places/?v=faces-places",
-    "http://www.tiff.net/tiff/in-the-fade/",
-    "http://www.tiff.net/tiff/happy-end/",
-    "http://www.tiff.net/tiff/the-other-side-of-hope",
-    "http://www.tiff.net/tiff/a-fantastic-woman",
-    "http://www.tiff.net/tiff/soldiers-story-from-ferentari/",
-    "http://www.tiff.net/tiff/sheikh-jackson/",
-    "http://www.tiff.net/tiff/lady-bird/",
-    "http://www.tiff.net/tiff/mary-shelley/",
+COUPLE_FILM_URLS = (
+    "https://www.tiff.net/tiff/roma/",
+    "https://www.tiff.net/tiff/everybody-knows/",
+    "https://www.tiff.net/tiff/museo/",
+    "https://www.tiff.net/tiff/loro/",
+    "https://www.tiff.net/tiff/dogman/",
+    "https://www.tiff.net/tiff/meeting-gorbachev/",
+    "https://www.tiff.net/tiff/the-wild-pear-tree/",
+    "https://www.tiff.net/tiff/saf/",
 )
 
-EKIN_FILM_URLS = (
-    "http://www.tiff.net/tiff/catch-the-wind/",
-    "http://www.tiff.net/tiff/jane/",
-    "http://www.tiff.net/tiff/boom-for-real-the-late-teenage-years-of-jean-michel-basquiat/",
-    "http://www.tiff.net/tiff/one-of-us/",
-    "http://www.tiff.net/tiff/redoubtable/",
+SINGLE_FILM_URLS = (
+    "https://www.tiff.net/tiff/maria-by-callas/",
 )
 
 
@@ -85,4 +76,4 @@ def main(urls, optimize_for="evening"):
 
 
 if __name__ == "__main__":
-    sys.exit(main(EKIN_FILM_URLS, optimize_for="day"))
+    sys.exit(main(COUPLE_FILM_URLS, optimize_for="evening"))
