@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import optparse
 import requests
 import sys
 
@@ -11,20 +12,36 @@ from pprint import pprint
 
 FILM_DETAIL_URL = "http://www.tiff.net/data/films/%(slug)s.json"
 
-COUPLE_FILM_URLS = (
-    "https://www.tiff.net/tiff/roma/",
-    "https://www.tiff.net/tiff/everybody-knows/",
-    "https://www.tiff.net/tiff/museo/",
-    "https://www.tiff.net/tiff/loro/",
-    "https://www.tiff.net/tiff/dogman/",
-    "https://www.tiff.net/tiff/meeting-gorbachev/",
-    "https://www.tiff.net/tiff/the-wild-pear-tree/",
-    "https://www.tiff.net/tiff/saf/",
-)
 
-SINGLE_FILM_URLS = (
-    "https://www.tiff.net/tiff/maria-by-callas/",
-)
+def parse_args():
+    """
+    Parse command line options into variables
+    """
+    parser = optparse.OptionParser(usage="Usage: %prog [options]")
+    
+    parser.add_option("--film-urls", 
+        type="string", 
+        dest="urls",
+        help=("Film URLs to pick from, separated by commas")
+    )
+    
+    parser.add_option("--film-urls-file-path", 
+        type="string", 
+        dest="filepath",
+        help=("File that contains film URLs to pick from")
+    )
+    
+    parser.add_option("--optimize-for", 
+        type="choice", 
+        dest="optimize_for",
+        choices=["day", "evening"], 
+        default="evening", 
+        help=("Option for optimizing for day or evening times")
+    )
+    
+    (options, args) = parser.parse_args()
+
+    return options
 
 
 def main(urls, optimize_for="evening"):
@@ -76,4 +93,12 @@ def main(urls, optimize_for="evening"):
 
 
 if __name__ == "__main__":
-    sys.exit(main(COUPLE_FILM_URLS, optimize_for="evening"))
+    options = parse_args()
+
+    if options.urls:
+        urls = options.urls.split(",")
+    else:
+        with open(options.filepath, "r") as data_file:
+            urls = data_file.read().splitlines()
+    pprint(urls)
+    sys.exit(main(urls, optimize_for=options.optimize_for))
