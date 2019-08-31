@@ -10,7 +10,7 @@ from dateutil import parser
 from pprint import pprint
 
 
-FILM_DETAIL_URL = "http://www.tiff.net/data/films/%(slug)s.json"
+FILM_SCHEDULE_DATA_URL = "https://www.tiff.net/festivalfilmlist"
 
 
 def parse_args():
@@ -45,24 +45,36 @@ def parse_args():
 
 
 def main(urls, optimize_for="evening"):
+    req = requests.get(FILM_SCHEDULE_DATA_URL)
+    response = req.json()
+    films = {}
+    
+    for film_data in response["items"]:
+        slug = film_data.get("slug")
+        
+        if not slug:
+            continue
+        
+        films[slug] = {
+            "title": film_data.get("title"),
+            "schedule": film_data.get("scheduleItems", [])
+        }
+    
     days = {}
     
     for url in urls:
         parsed_url = urlparse(url)
-        slug = parsed_url.path.replace("/tiff", "").strip("/")
-        req = requests.get(FILM_DETAIL_URL % {
-            "slug": slug,
-        }, headers={
-            "Content-Type": "application/json"
-        })
-
-        response = req.json()
-        schedule_items = response.get("scheduleItems", [])
-        title = response.get("title")
+        slug = parsed_url.path.replace("/events", "").strip("/")
+        film_data = films.get(slug)
+        
+        if not film_data:
+            continue
+        
+        title = film_data.get("title")
         found = False
 
-        for schedule in schedule_items:
-            if schedule.get("audienceType", "Public") != "Public":
+        for schedule in film_data.get("schedule", []):
+            if schedule.get("pressAndIndustry", False) is True:
                 continue
             
             start_time = parser.parse(schedule.get("startTime"))
